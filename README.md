@@ -14,3 +14,5 @@ Steps:
 Api methods supported:
  * scan
  * version
+ * spur
+ * info

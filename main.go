@@ -29,6 +29,7 @@ func main() {
 	}
 
 	fmt.Println(device.Version())
+	fmt.Println(device.Info())
 
 	values, err := device.Scan(90_000_000, 105_000_000)
 	fmt.Println(values, err)

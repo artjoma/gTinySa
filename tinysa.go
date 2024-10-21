@@ -57,6 +57,21 @@ func (tiny *TinySaDevice) version() (string, error) {
 	return tiny.readResponse()
 }
 
+func (tiny *TinySaDevice) Info() ([]string, error) {
+	data, err := tiny.info()
+	if err != nil {
+		return nil, err
+	}
+	return removeCommandLine(data), nil
+}
+
+func (tiny *TinySaDevice) info() (string, error) {
+	if err := tiny.sendRequest("info"); err != nil {
+		return "", err
+	}
+	return tiny.readResponse()
+}
+
 func (tiny *TinySaDevice) Scan(fromFq, toFq uint64) ([][]int64, error) {
 	dataStr, err := tiny.scan(fromFq, toFq, tiny.config.scanPoints)
 	if err != nil {
@@ -87,6 +102,22 @@ func (tiny *TinySaDevice) Scan(fromFq, toFq uint64) ([][]int64, error) {
 // scan 90M 100M 100 3
 func (tiny *TinySaDevice) scan(fromFq, toFq uint64, points uint16) (string, error) {
 	if err := tiny.sendRequest(fmt.Sprintf("scan %d %d %d 3", fromFq, toFq, points)); err != nil {
+		return "", err
+	}
+	return tiny.readResponse()
+}
+
+func (tiny *TinySaDevice) Spur(enable bool) error {
+	_, err := tiny.spur(enable)
+	return err
+}
+
+func (tiny *TinySaDevice) spur(enable bool) (string, error) {
+	val := "off"
+	if enable {
+		val = "on"
+	}
+	if err := tiny.sendRequest(fmt.Sprintf("spur %s", val)); err != nil {
 		return "", err
 	}
 	return tiny.readResponse()

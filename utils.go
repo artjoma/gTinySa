@@ -19,6 +19,7 @@ func tryFindDevice() (*enumerator.PortDetails, error) {
 	}
 
 	for _, port := range ports {
+		fmt.Printf("Device: %+v\n", port)
 		vid, err := strconv.ParseInt(port.VID, 16, 64)
 		if err != nil {
 			continue
